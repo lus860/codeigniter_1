@@ -9,11 +9,16 @@
                     <div class="col-md-4">
                         <div class="profile-img">
                            <?php if($user):?>
-                            <img src="<?=base_url()?>files/<?=$user[0]->prof_img?>" class="w-100">
+                            <?php if($user[0]->prof_img==null){?>
+                            <img src="<?=base_url()?>files/avatar.png" width="30px" class="mr-2">
+                            <?php }else{?>  
+                             <img src="<?=base_url()?>files/<?=$user[0]->prof_img?>" class="w-100">
+                            <?php };?>
                             <?php endif?>
                             <div class="file btn btn-lg btn-primary">
                                 Change Photo
                                 <input type="file" name="file_pr"/>
+                                <input type="hidden" name="token" value="<?=$_GET["token"]?>"/>
                             </div>
                         </div>
                     </div>
@@ -68,6 +73,11 @@
                         </div>
                     </div>
                 </div>
-            <?php echo form_close(); ?>        
+<?php echo form_close(); ?> 
+<?php if(isset($_SESSION['msg_error_upload'])):?>
+<div class="alert alert-danger text-center">
+<?=$this->session->flashdata('msg_error_upload');?>
+</div>
+<?php endif?>       
         </div>
        

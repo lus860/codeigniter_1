@@ -13,12 +13,12 @@ class Email_send extends CI_Model {
         $this->load->model('user');
     } 
 
-    function sendEmail($hash, $email)
+    public function sendEmail($hash, $email)
         
     {
         $from_email = 'lusinehovhannisyan280@gmail.com';
         $subject = 'Verify Your Email Address';
-        $message = "http://codeigniter/welcome/verify?hash=$hash ";
+        $message = "<a href='http://codeigniter/welcome/verify?hash=$hash'>Active link</a>";
         
         $config['protocol'] = 'smtp';
         $config['smtp_host'] = 'ssl://smtp.gmail.com'; 
@@ -41,7 +41,7 @@ class Email_send extends CI_Model {
     }
     
     //activate user account
-    function verifyEmailID($key)
+    public function verifyEmailID($key)
         
     {
         $data = array('status'=>"1");

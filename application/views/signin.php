@@ -1,6 +1,4 @@
- <?php if(isset($_SESSION['user_id'])): ?>
-   <a class="alert" href="<?=site_url('profile?token='.$_SESSION['result']);?>" > <h2 style="color:red;">Welcome Profile</h2></a>
-	<?php endif ?>
+
     <div class="limiter">
 		<div class="container-login">
 			<div class="wrap-login">
@@ -39,14 +37,15 @@
 							Don’t have an account?
 						</span>
 
-						<a class="txt2" href="registration.php">
-							Sign Up
-						</a>
+						<a class="nav-link" href="<?=base_url()?>welcome">Sign Up</a>
 					</div>
 				<?php echo form_close(); ?>
-				<?php if(isset($_SESSION['verify_msg'])):?>
-                   <?=$this->session->flashdata('verify_msg');?>
-                <?php endif?> 
+				<?php if(isset($_SESSION['verify_msg_success'])):?>
+                   <div class="alert alert-success text-center"> <?=$this->session->flashdata('verify_msg_success');?></div>
+                 <?php endif?> 
+                 <?php if(isset($_SESSION['verify_msg_error'])):?>
+                   <div class="alert alert-danger text-center"><?=$this->session->flashdata('verify_msg_error');?></div>
+                 <?php endif?> 
 			</div>
 		</div>
 	</div>

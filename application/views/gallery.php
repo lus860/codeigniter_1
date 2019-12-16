@@ -13,7 +13,7 @@
 <?php  $album_name='';
 foreach($files_img as $file_img): ?>
 <?php if($file_img->album_name === $album_name){continue; }?>
-<button type="button" class="btn btn-primary btn-lg ml-5 mt-1"><a href="<?=site_url("profile/gallery?album_name=$file_img->album_name")?>"><?=$file_img->album_name;?></a></button>
+<button type="button" class="btn btn-primary btn-lg ml-5 mt-1 p-0"><a style="display:block;"class="p-3" href="<?=site_url("profile/gallery?album_name=$file_img->album_name")?>"><?=$file_img->album_name;?></a></button>
 <?php $album_name=$file_img->album_name;?>
 <?php endforeach; ?>
     
@@ -34,9 +34,8 @@ foreach($files_img as $file_img): ?>
 <button type="button" class="btn btn-lg btn-primary ml-5 mt-1" disabled><a href="<?=site_url("profile/deleteall?album=$album")?>"><h3>Delete</h3></a></button>
   
 <?php endif; ?>
-<button type="button" class="btn btn-lg btn-primary ml-5 mt-1" disabled><a href="<?=site_url("profile/uploadview")?>"><h3>Upload</h3></a></button>
-        
-        
+<button type="button" class="btn btn-lg btn-primary ml-5 mt-1" disabled><a href="<?=site_url("profile/uploadview")?>"><h3>Create Album</h3></a></button>
+
  
 
 

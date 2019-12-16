@@ -67,14 +67,15 @@
 							Already have an account?
 						</span>
 
-						<a class="txt2" href="login.php">
-							Sign In
-						</a>
+						<a class="nav-link" href="<?=base_url()?>welcome/login">Sign In</a>
 					</div>
 				<?php echo form_close(); ?>
-				<?php if(isset($_SESSION['msg'])):?>
-				 <?=$this->session->flashdata('msg');?>
-				 <?php endif?>
+				<?php if(isset($_SESSION['msg_success'])):?>
+				   <div class="alert alert-success text-center"><?=$this->session->flashdata('msg_success');?></div>
+				<?php endif?>
+				<?php if(isset($_SESSION['msg_error'])):?>
+				   <div class="alert alert-danger text-center"><?=$this->session->flashdata('msg_error');?></div>
+				<?php endif?>
 			</div>
 		</div>
 	</div>

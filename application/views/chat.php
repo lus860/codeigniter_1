@@ -157,7 +157,13 @@ img{ max-width:100%;}
           <?php foreach($results as $result):?>
            <?php if($result['user_first']==$user[0]->id){?>
             <div class="incoming_msg">
-              <div class="incoming_msg_img"> <img src="<?=base_url()?>files/<?=$result['prof_img']?>"> </div>
+              <div class="incoming_msg_img"> 
+               <?php if($result['prof_img']==null){?>
+                <img src="<?=base_url()?>files/avatar.png" width="30px" class="mr-2">
+              <?php }else{?>  
+              <img src="<?=base_url()?>files/<?=$result['prof_img']?>">
+              <?php };?>
+               </div>
               <div class="received_msg">
                 <div class="received_withd_msg">
                   <span class="time_date" style="color:black;"><?=$result['firstname']." ".$result['lastname']?></span>
@@ -169,7 +175,13 @@ img{ max-width:100%;}
             </div>
             <?php }else{;?>
             <div class="outgoing_msg">
-             <div class="incoming_msg_img float-right"> <img src="<?=base_url()?>files/<?=$result['prof_img']?>"> </div>
+             <div class="incoming_msg_img float-right"> 
+                <?php if($result['prof_img']==null){?>
+                <img src="<?=base_url()?>files/avatar.png" width="30px" class="mr-2">
+              <?php }else{?>  
+              <img src="<?=base_url()?>files/<?=$result['prof_img']?>">
+              <?php };?>
+             </div>
               <div class="sent_msg mr-3">
                   <span class="time_date" style="color:black;"><?=$result['firstname']." ".$result['lastname']?></span>
                 <p><?=$result['message']?>
@@ -185,7 +197,7 @@ img{ max-width:100%;}
           <div class="type_msg">
             <div class="input_msg_write">
               <?php echo form_open("profile/add_chat");?>
-              <input type="text" class="write_msg input" placeholder="Type a message" name="message"/>
+              <input type="text"  style="color:black;" class="write_msg input" placeholder="Type a message" name="message"/>
               <input type="hidden" class="write_msg" placeholder="Type a message" name="us_second" value="<?=$user_second?>" />
               <button class="msg_send_btn login-form-btn" type="submit" name="submit"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
               <?php echo form_close();?>

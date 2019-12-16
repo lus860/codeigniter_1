@@ -24,18 +24,20 @@ class User extends CI_Model {
     {
  
         $query = $this->db->get_where('users', array('email'=>$email, 'password'=>$password));
-        if ($query->num_rows()==0) return false;
+        if ($query->num_rows()==0) {
+            return false;
+        }
         else {
-           $result = $query->result();
-           $first_row = $result[0];
-           $userid = $first_row->id;
-           $query = $this->db->get_where('users', array('id'=>$userid));
-           $result_user = $query->result();
-           $status=$result_user[0]->status;
-           if ($status==1){
+            $result = $query->row();
+            //$first_row = $result[0];
+            $userid = $result->id;
+            $query = $this->db->get_where('users', array('id'=>$userid));
+            $result_user = $query->row();
+            $status=$result_user->status;
+            if ($status==1){
               return $userid;
             } else { 
-              return false;
+              return "1";
             } 
        
         }
@@ -67,8 +69,8 @@ class User extends CI_Model {
     {
         
         $query = $this->db->get_where('users', array('id'=>$id, 'status'=>"1"));
-        $result = $query->result();
-        $result=$result[0]->random_link;
+        $result = $query->row();
+        $result=$result->random_link;
         return $result;
         
     }

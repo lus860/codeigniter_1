@@ -24,7 +24,7 @@ class Files extends CI_Model {
     public function get_album($userid)
     
     { 
-        $query = $this->db->get_where('album',array('us_id'=>$this->session->userdata('userid')));
+        $query = $this->db->get_where('album',array('us_id'=>$userid));
         $result = $query->result();
         return $result;
     }
@@ -45,8 +45,8 @@ class Files extends CI_Model {
         $this->db->where('id', $this->session->userdata('userid'));
         $this->db->update('users');
         $query = $this->db->get_where('users',array('id'=>$this->session->userdata('userid')));
-        $result = $query->result();
-        $random_link=$result[0]->random_link;
+        $result = $query->row();
+        $random_link=$result->random_link;
         return $random_link;
 
     }
@@ -56,9 +56,9 @@ class Files extends CI_Model {
     {   
         $query_album = $this->db->delete('album',array('us_id'=>$this->session->userdata('userid'),'album_name'=>$album, 'file_id'=>$id));
         $query = $this->db->get_where('files',array('id'=>$id,'user_id'=>$this->session->userdata('userid')));
-        $result = $query->result();
+        $result = $query->row();
         $query = $this->db->delete('files', array('id'=>$id, 'user_id'=>$this->session->userdata('userid')));
-        return $result[0]->img;
+        return $result->img;
     }
     
     public function deleteall($mytable,$album)
@@ -70,8 +70,8 @@ class Files extends CI_Model {
         foreach ($query_album->result() as $row) {
            $file_id=$row->file_id;
            $query = $this->db->get_where('files',array('id'=>$file_id));
-           $res=$query->result();
-           $result[]=$res[0]->img;
+           $res=$query->row();
+           $result[]=$res->img;
            $this->db->delete('files',array('id'=>$file_id));
         }
         

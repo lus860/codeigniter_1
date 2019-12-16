@@ -7,6 +7,7 @@ class Profile extends CI_Controller {
         parent:: __construct();
         $this->load->model('user');  
         $this->load->model('files');
+        $this->load->library('upload');
         $this->userid = $this->session->userdata('userid');
         if (!isset($this->userid) or $this->userid=='') redirect('login');
     }
@@ -27,7 +28,7 @@ class Profile extends CI_Controller {
     {
         $this->session->unset_userdata( $this->userid);
         $this->session->sess_destroy();
-        redirect('welcome');
+        redirect('welcome/login');
         
     }
     
@@ -45,11 +46,13 @@ class Profile extends CI_Controller {
         
     }
     
-    public function upload()
+    /*public function upload()
         
     {
         
     if(isset($_FILES['files'])){
+        //$config['allowed_types'] = 'jpg|jpeg|png|gif';
+        //$this->load->library('upload',$config);
         $album_name=$_POST['album_name'];
         $myFile = $_FILES['files'];
         $fileCount = count($myFile["name"]);
@@ -62,9 +65,51 @@ class Profile extends CI_Controller {
         redirect('profile/album_name');        
     } else $this->load->view('profile/uploadview');
         
+    }*/
+    
+    
+    public function upload()
+    { 
+        $data = [];
+        $count = count($_FILES['files']['name']);
+        $album_name=$this->input->post('album_name');
+        if($_FILES['files']['name'][0]!==""){
+            for($i=0;$i<$count;$i++){
+                if (!empty($_FILES['files']['name'][$i])){
+                    $_FILES['file']['name'] = $_FILES['files']['name'][$i];
+                    $_FILES['file']['type'] = $_FILES['files']['type'][$i];
+                    $_FILES['file']['tmp_name'] = $_FILES['files']['tmp_name'][$i];
+                    $_FILES['file']['error'] = $_FILES['files']['error'][$i];
+                    $_FILES['file']['size'] = $_FILES['files']['size'][$i];
+  
+                    $config['upload_path'] = 'files/'; 
+                    $config['allowed_types'] = 'jpg|jpeg|png|gif';
+                    $config['file_name'] = $_FILES['files']['name'][$i];
+            
+                    $this->load->library('upload', $config); 
+                    $this->upload->initialize($config);  
+    
+                    if ($this->upload->do_upload('file')){
+                        $uploadData = $this->upload->data();
+                        $filename = $uploadData['file_name'];
+                        $this->files->add($filename, $album_name);
+                        //$data['totalFiles'][] = $filename;
+                    } else {
+                        $this->session->set_flashdata('msg_error_upload','Some problem occurred, please try again!!!');
+                        redirect("profile/uploadview");
+                        }
+                }
+   
+            }
+           
+            redirect('profile/album_name');        
+        } else{
+           $this->session->set_flashdata('msg_error_upload','Image(s) not found...!!!'); 
+           redirect("profile/uploadview");
+        } 
+        
     }
-    
-    
+  
     public function album_name()
         
     {  
@@ -114,10 +159,11 @@ class Profile extends CI_Controller {
         
     }
     
-    public function upload_pr()
+   /* public function upload_pr()
         
     {
         if (isset($_FILES['file_pr'])) {
+           
            $file   = read_file($_FILES['file_pr']['tmp_name']);
            $name   = basename($_FILES['file_pr']['name']);
            write_file('files/'.$name, $file);
@@ -125,9 +171,34 @@ class Profile extends CI_Controller {
         
         }
         redirect('profile?token='.$random_link);        
-    } //else $this->load->view('profile/uploadview');
+    } //else $this->load->view('profile/uploadview');*/
     
-    
+    public function upload_pr()
+        
+    {  
+    $token=$this->input->post('token');
+    if (!empty($_FILES['file_pr']['name'])) {
+        $config['upload_path'] = 'files/'; 
+        $config['allowed_types'] = 'jpg|jpeg|png|gif';
+        $config['file_name'] = $_FILES['file_pr']['name'];
+        $this->load->library('upload', $config); 
+        $this->upload->initialize($config); 
+        if ($this->upload->do_upload('file_pr')){
+            $uploadData = $this->upload->data();
+            $filename = $uploadData['file_name'];
+            $random_link=$this->files->add_pr($filename);
+            redirect('profile?token='.$random_link); 
+        } else{
+            $this->session->set_flashdata('msg_error_upload','Some problem occurred, please try again!!!');
+             redirect('profile?token='.$token); 
+        }
+    redirect('profile/uploadview'); 
+    } else{
+        $this->session->set_flashdata('msg_error_upload','Image not found...!!!');  
+        redirect('profile?token='.$token); 
+    } 
+        
+    }
     
     
      public function all_profile()
